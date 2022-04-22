@@ -65,6 +65,15 @@ class OpOverload:
     def op(self):
         return self._op
 
+    def impl(self, lib_obj, dispatch_key, fn):
+        name = self.__name__ if self._overloadname != 'default' else self.__name__.split(".")[0]
+        lib_obj.impl(name, dispatch_key, fn)
+        return
+
+    # TODO: in a follow-up PR add a method to allow users to retain the existing function registered for
+    # a dispatch key befor they override the behavior
+    # def get_impl(self, dispatch_key):
+    #     return
     # TODO: add more methods to expose information about input and output arguments
 
 # OpOverloadPacket class contains pointer to a base unresolved operator that doesn't correspond to a specific operator
