@@ -206,6 +206,15 @@ class AOTInductorTestsTemplate:
 
         example_inputs = (torch.randn(16, 10, device=self.device),)
         self.check_model(Model(), example_inputs)
+    
+    def test_addmm(self):
+        class Model(torch.nn.Module):
+            def forward(self, x, weight, bias):
+                y = torch.nn.functional.linear(x, weight, bias)
+                return y
+
+        example_inputs = (torch.randn(3, 3, device=self.device), torch.randn(3, 3, device=self.device), torch.randn(3, device=device))
+        self.check_model(Model(), example_inputs)
 
     def test_small_constant(self):
         class Model(torch.nn.Module):

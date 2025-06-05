@@ -101,6 +101,7 @@ copy_tests(
 
 test_list_gpu = {
     "test_cos",
+    "test_addmm",
 }
 
 
