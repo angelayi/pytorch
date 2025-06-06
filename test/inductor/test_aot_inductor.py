@@ -207,13 +207,30 @@ class AOTInductorTestsTemplate:
         example_inputs = (torch.randn(16, 10, device=self.device),)
         self.check_model(Model(), example_inputs)
     
-    def test_addmm(self):
+    def test_addmm1(self):
         class Model(torch.nn.Module):
             def forward(self, x, weight, bias):
                 y = torch.nn.functional.linear(x, weight, bias)
                 return y
 
-        example_inputs = (torch.randn(3, 3, device=self.device), torch.randn(3, 3, device=self.device), torch.randn(3, device=device))
+        example_inputs = (torch.randn(3, 3, device=self.device), torch.randn(3, 3, device=self.device), torch.randn(3, device=self.device))
+        ep = torch.export.export(Model(), example_inputs)
+        # path = torch._inductor.aot_compile(ep.module(), example_inputs)
+        # print(f"{path[:-3]}.cpp")
+        # model = torch._export.aot_load(path, device=self.device)
+        # breakpoint()
+        self.check_model(Model(), example_inputs)
+    
+    def test_hann_window(self):
+        class Model(torch.nn.Module):
+            def forward(self, spec):
+                window = torch.hann_window(1024).type(torch.FloatTensor)
+                return window
+
+        model = istft_class()
+        real_part = torch.randn(1, 513, 282, dtype=torch.float32)
+        imaginary_part = torch.randn(1, 513, 282, dtype=torch.float32)
+        spec = torch.complex(real_part, imaginary_part)
         self.check_model(Model(), example_inputs)
 
     def test_small_constant(self):

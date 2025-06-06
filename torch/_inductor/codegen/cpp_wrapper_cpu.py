@@ -229,6 +229,11 @@ class CppWrapperCpu(PythonWrapperCodegen):
                         "cuda",
                         "c_shim_cuda.cpp",
                     ),
+                    os.path.join(
+                        csrc_root,
+                        "cpu",
+                        "c_shim_cpu.cpp",
+                    ),
                 ]:
                     with open(file) as f:
                         self.header.splice(f.read())
